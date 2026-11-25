@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>VR虚拟现实模拟实验</title>
+
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+
+</head>
+
+<body>
+
+<a-scene>
+
+    <!-- 天空背景 -->
+    <a-sky color="#87CEEB"></a-sky>
+
+    <!-- 地面 -->
+    <a-plane
+        position="0 0 0"
+        rotation="-90 0 0"
+        width="30"
+        height="30"
+        color="#90EE90">
+    </a-plane>
+
+    <!-- 红色立方体 -->
+    <a-box
+        position="-2 1 -4"
+        color="red"
+        rotation="0 30 0">
+    </a-box>
+
+    <!-- 黄色球体 -->
+    <a-sphere
+        position="0 1 -4"
+        radius="1"
+        color="yellow">
+    </a-sphere>
+
+    <!-- 蓝色圆柱体 -->
+    <a-cylinder
+        position="2 1 -4"
+        radius="0.5"
+        height="2"
+        color="blue">
+    </a-cylinder>
+
+    <!-- 欢迎文字 -->
+    <a-text
+        value="Welcome to VR World!"
+        position="-2 3 -4"
+        color="black"
+        width="5">
+    </a-text>
+
+    <!-- 光照 -->
+    <a-light
+        type="ambient"
+        color="#FFFFFF"
+        intensity="1">
+    </a-light>
+
+    <!-- 摄像机：开启鼠标视角控制和键盘移动 -->
+    <a-entity
+    id="cameraRig"
+    position="0 0 0"
+    wasd-controls>
+
+    <a-camera
+        position="0 1.6 0"
+        look-controls="magicWindowTrackingEnabled: true">
+    </a-camera>
+
+</a-entity>
+
+</a-scene>
+
+<!-- 手机传感器授权按钮 -->
+<button id="sensorBtn"
+    style="
+    position:fixed;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:999;
+    padding:15px 25px;
+    font-size:18px;
+    background:#1677ff;
+    color:white;
+    border:none;
+    border-radius:10px;">
+    开启手机陀螺仪
+</button>
+
+<script>
+document.getElementById("sensorBtn")
+.addEventListener("click", async function() {
+
+    try {
+        // iPhone Safari 需要申请传感器权限
+        if (
+            typeof DeviceOrientationEvent.requestPermission
+            === "function"
+        ) {
+            const permission =
+                await DeviceOrientationEvent.requestPermission();
+
+            if (permission !== "granted") {
+                alert("没有获得传感器权限，请重新授权");
+                return;
+            }
+        }
+
+        alert("传感器授权成功，请转动手机体验！");
+        
+    } catch (error) {
+        alert("传感器启动失败：" + error);
+    }
+
+});
+</script>
+
+
+</body>
+</html>
