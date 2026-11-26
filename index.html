@@ -1,127 +1,333 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>VR虚拟现实模拟实验</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+
+    <title>VR未来 - 中文科技虚拟展厅</title>
 
     <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
-
+    <style>
+        body { margin: 0; overflow: hidden; font-family: "Microsoft YaHei", sans-serif; }
+        #infoCanvas { display: none; }
+    </style>
 </head>
 
 <body>
 
-<a-scene>
+<a-scene
+    background="color: #050817"
+    vr-mode-ui="enabled: true"
+    renderer="colorManagement: true; antialias: true; highRefreshRate: true; physicallyCorrectLights: true"
+    fog="type: exponential; color: #050817; density: 0.035">
 
-    <!-- 天空背景 -->
-    <a-sky color="#87CEEB"></a-sky>
+    <a-sky color="#050817"></a-sky>
 
     <!-- 地面 -->
-    <a-plane
-        position="0 0 0"
-        rotation="-90 0 0"
-        width="30"
-        height="30"
-        color="#90EE90">
-    </a-plane>
+    <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" color="#10152D" material="roughness: 0.75; metalness: 0.15"></a-plane>
 
-    <!-- 红色立方体 -->
+    <!-- 网格线 -->
+    <a-box position="0 0.015 -4" width="16" height="0.025" depth="0.035" color="#174B9B"></a-box>
+    <a-box position="0 0.015 -6" width="16" height="0.025" depth="0.035" color="#174B9B"></a-box>
+    <a-box position="0 0.015 -8" width="16" height="0.025" depth="0.035" color="#174B9B"></a-box>
+    <a-box position="-6 0.015 -4" width="0.035" height="0.025" depth="12" color="#174B9B"></a-box>
+    <a-box position="-3 0.015 -4" width="0.035" height="0.025" depth="12" color="#174B9B"></a-box>
+    <a-box position="3 0.015 -4" width="0.035" height="0.025" depth="12" color="#174B9B"></a-box>
+    <a-box position="6 0.015 -4" width="0.035" height="0.025" depth="12" color="#174B9B"></a-box>
+
+    <!-- 墙壁 -->
+    <a-box position="0 3 -9" width="18" height="6" depth="0.2" color="#111A3A"></a-box>
+    <a-box position="-9 3 -4" width="0.2" height="6" depth="10" color="#111A3A"></a-box>
+    <a-box position="9 3 -4" width="0.2" height="6" depth="10" color="#111A3A"></a-box>
+
+    <a-box position="0 0.5 -8.86" width="17" height="0.06" depth="0.05" color="#168BFF"></a-box>
+    <a-box position="0 5.5 -8.86" width="17" height="0.06" depth="0.05" color="#8B5CFF"></a-box>
+    <a-box position="-8.86 3 -4" width="0.05" height="0.06" depth="9" color="#168BFF"></a-box>
+    <a-box position="8.86 3 -4" width="0.05" height="0.06" depth="9" color="#8B5CFF"></a-box>
+
+    <!-- 标题 -->
+    <a-text value="VR 未来" position="-2.4 4.5 -8.7" color="#48CFFF" width="5" align="center" font="kelsonsans"></a-text>
+    <a-text value="未来科技展览" position="-2.8 4 -8.7" color="#C1B5FF" width="6" align="center" font="kelsonsans"></a-text>
+    <a-text value="欢迎来到虚拟世界" position="-2.5 3.5 -8.7" color="#FFFFFF" width="5" align="center" font="kelsonsans"></a-text>
+
+    <!-- ===== 左侧展品：能量立方 ===== -->
+    <a-cylinder position="-3 0.35 -4" radius="1.1" height="0.7" color="#172A60"></a-cylinder>
+    <a-cylinder position="-3 0.72 -4" radius="1.12" height="0.06" color="#168BFF"></a-cylinder>
+
     <a-box
-        position="-2 1 -4"
-        color="red"
-        rotation="0 30 0">
+        id="energyCube"
+        class="clickable"
+        position="-3 1.7 -4"
+        width="1.2" height="1.2" depth="1.2"
+        color="#168BFF"
+        material="metalness: 0.5; roughness: 0.25; emissive: #0A2A5A; emissiveIntensity: 0.3"
+        rotation="15 30 15"
+        animation="property: rotation; to: 15 390 375; loop: true; dur: 8000; easing: linear">
     </a-box>
 
-    <!-- 黄色球体 -->
-    <a-sphere
-        position="0 1 -4"
-        radius="1"
-        color="yellow">
-    </a-sphere>
+    <a-text value="01 能量立方" position="-4 0.9 -2.85" color="#FFFFFF" width="3" align="center" font="kelsonsans"></a-text>
 
-    <!-- 蓝色圆柱体 -->
+    <!-- ===== 中间展品：能量核心 ===== -->
+    <a-cylinder position="0 0.35 -4" radius="1.1" height="0.7" color="#292052"></a-cylinder>
+    <a-cylinder position="0 0.72 -4" radius="1.12" height="0.06" color="#A45BFF"></a-cylinder>
+
+    <a-entity id="energyCore" position="0 1.9 -4"
+              animation="property: position; from: 0 1.6 -4; to: 0 2.3 -4; dir: alternate; loop: true; dur: 2200; easing: easeInOutSine">
+        <a-sphere
+            id="energySphere"
+            class="clickable"
+            position="0 0 0"
+            radius="0.85"
+            color="#A45BFF"
+            material="metalness: 0.3; roughness: 0.2; emissive: #3A1A6A; emissiveIntensity: 0.4">
+        </a-sphere>
+        <a-torus
+            id="energyRing"
+            position="0 0 0" radius="1.05" radius-tubular="0.035"
+            color="#38CFFF"
+            material="emissive: #168BFF; emissiveIntensity: 1"
+            rotation="70 0 0"
+            animation="property: rotation; to: 70 360 360; loop: true; dur: 6000; easing: linear">
+        </a-torus>
+    </a-entity>
+
+    <a-text value="02 能量核心" position="-1 0.9 -2.85" color="#FFFFFF" width="3" align="center" font="kelsonsans"></a-text>
+
+    <!-- ===== 右侧展品：能量之塔 ===== -->
+    <a-cylinder position="3 0.35 -4" radius="1.1" height="0.7" color="#172A60"></a-cylinder>
+    <a-cylinder position="3 0.72 -4" radius="1.12" height="0.06" color="#168BFF"></a-cylinder>
+
     <a-cylinder
-        position="2 1 -4"
-        radius="0.5"
-        height="2"
-        color="blue">
+        id="energyTower"
+        class="clickable"
+        position="3 1.7 -4" radius="0.55" height="1.8"
+        color="#785BFF"
+        material="metalness: 0.4; roughness: 0.2; emissive: #5420FF; emissiveIntensity: 0.8"
+        animation="property: scale; from: 1 1 1; to: 1.08 1.08 1.08; dir: alternate; loop: true; dur: 1500; easing: easeInOutSine">
     </a-cylinder>
+    <a-torus
+        position="3 1.7 -4" radius="0.8" radius-tubular="0.025"
+        color="#38CFFF" rotation="90 0 0"
+        animation="property: rotation; to: 90 360 0; loop: true; dur: 5000; easing: linear">
+    </a-torus>
 
-    <!-- 欢迎文字 -->
-    <a-text
-        value="Welcome to VR World!"
-        position="-2 3 -4"
-        color="black"
-        width="5">
-    </a-text>
+    <a-text value="03 能量之塔" position="2 0.9 -2.85" color="#FFFFFF" width="3" align="center" font="kelsonsans"></a-text>
 
-    <!-- 光照 -->
+    <!-- 装饰柱 -->
+    <a-box position="-7 2 -7" width="0.35" height="4" depth="0.35" color="#17265B"></a-box>
+    <a-box position="7 2 -7" width="0.35" height="4" depth="0.35" color="#17265B"></a-box>
+    <a-box position="-7 4 -7" width="0.5" height="0.08" depth="0.5" color="#168BFF"></a-box>
+    <a-box position="7 4 -7" width="0.5" height="0.08" depth="0.5" color="#A45BFF"></a-box>
+
+    <!-- ========== 重新设计的灯光系统 ========== -->
+
+    <!-- 1. 环境光：整体基础照明，强度较低，保留暗部细节 -->
+    <a-light type="ambient" color="#8899CC" intensity="0.45"></a-light>
+
+    <!-- 2. 半球光：模拟天空与地面的环境反射，让暗部有色彩倾向 -->
+    <a-light type="hemisphere" color="#3A5A9A" ground-color="#0A0A1A" intensity="0.5"></a-light>
+
+    <!-- 3. 主聚光灯：从展厅前上方斜照向展品区域，形成视觉焦点与投影 -->
     <a-light
-        type="ambient"
-        color="#FFFFFF"
-        intensity="1">
+        type="spot"
+        position="0 6 3"
+        target="#energyCore"
+        angle="50"
+        penumbra="0.6"
+        intensity="1.6"
+        distance="20"
+        color="#C8D8FF"
+        castShadow="true">
     </a-light>
 
-    <!-- 摄像机：开启鼠标视角控制和键盘移动 -->
-    <a-entity
-    id="cameraRig"
-    position="0 0 0"
-    wasd-controls>
+    <!-- 4. 展品专属点光源：左侧蓝色立方 -->
+    <a-light
+        type="point"
+        position="-3 2.8 -4"
+        color="#168BFF"
+        intensity="1.4"
+        distance="6"
+        decay="1.5">
+    </a-light>
 
-    <a-camera
-        position="0 1.6 0"
-        look-controls="magicWindowTrackingEnabled: true">
-    </a-camera>
+    <!-- 5. 展品专属点光源：中间紫色核心 -->
+    <a-light
+        type="point"
+        position="0 3 -3.5"
+        color="#A45BFF"
+        intensity="1.6"
+        distance="6"
+        decay="1.5">
+    </a-light>
 
-</a-entity>
+    <!-- 6. 展品专属点光源：右侧紫色能量柱 -->
+    <a-light
+        type="point"
+        position="3 2.8 -4"
+        color="#785BFF"
+        intensity="1.4"
+        distance="6"
+        decay="1.5">
+    </a-light>
+
+    <!-- 7. 后墙补光：增强墙面装饰线与标题的可见度 -->
+    <a-light
+        type="point"
+        position="0 4.5 -8"
+        color="#48CFFF"
+        intensity="0.9"
+        distance="8"
+        decay="1.8">
+    </a-light>
+
+    <!-- 8. 地面环境补光：从下方微微照亮地面，避免完全死黑 -->
+    <a-light
+        type="point"
+        position="0 0.3 0"
+        color="#1A2A6A"
+        intensity="0.6"
+        distance="10"
+        decay="2">
+    </a-light>
+
+    <!-- 摄像机与VR控制 -->
+    <a-entity id="cameraRig" position="0 0 0" wasd-controls="acceleration: 15">
+        <a-camera
+            position="0 1.6 5"
+            look-controls="magicWindowTrackingEnabled: true; reverseMouseDrag: false"
+            cursor="rayOrigin: mouse"
+            raycaster="objects: .clickable; far: 30; interval: 100"
+            fov="80">
+
+            <!-- 信息面板（跟随摄像机） -->
+            <a-entity id="infoPanel" visible="false" position="0 0 0">
+                <a-plane position="0 0 -2.5" width="2.7" height="1.85" color="#168BFF" material="shader: flat; opacity: 0.95"></a-plane>
+                <a-plane position="0 0 -2.49" width="2.64" height="1.79" color="#10152D" material="shader: flat; opacity: 0.98"></a-plane>
+
+                <a-text id="panelTitle" value="展品信息" position="0 0.58 -2.46" align="center" color="#48CFFF" width="2.3" wrap-count="30" font="kelsonsans"></a-text>
+                <a-plane position="0 0.38 -2.45" width="2.2" height="0.012" color="#A45BFF"></a-plane>
+
+                <a-plane
+                    id="panelContent"
+                    position="0 0 -2.45"
+                    width="2.2"
+                    height="1.05"
+                    material="shader: flat; src: #infoCanvas; transparent: true">
+                </a-plane>
+
+                <a-plane id="closePanel" class="clickable" position="1.05 0.72 -2.42" width="0.28" height="0.22" color="#8B35FF"></a-plane>
+                <a-text value="X" position="1.05 0.68 -2.40" align="center" color="#FFFFFF" width="0.35" font="kelsonsans"></a-text>
+
+                <a-text value="VR未来科技" position="0 -0.73 -2.45" align="center" color="#38CFFF" width="1.8" font="kelsonsans"></a-text>
+            </a-entity>
+
+        </a-camera>
+    </a-entity>
 
 </a-scene>
 
-<!-- 手机传感器授权按钮 -->
-<button id="sensorBtn"
-    style="
-    position:fixed;
-    bottom:30px;
-    left:50%;
-    transform:translateX(-50%);
-    z-index:999;
-    padding:15px 25px;
-    font-size:18px;
-    background:#1677ff;
-    color:white;
-    border:none;
-    border-radius:10px;">
-    开启手机陀螺仪
-</button>
+<canvas id="infoCanvas" width="1024" height="600" style="display:none"></canvas>
 
 <script>
-document.getElementById("sensorBtn")
-.addEventListener("click", async function() {
+document.addEventListener('DOMContentLoaded', function () {
+    const panel = document.querySelector('#infoPanel');
+    const titleEl = document.querySelector('#panelTitle');
+    const contentPlane = document.querySelector('#panelContent');
+    const canvas = document.querySelector('#infoCanvas');
+    const ctx = canvas.getContext('2d');
 
-    try {
-        // iPhone Safari 需要申请传感器权限
-        if (
-            typeof DeviceOrientationEvent.requestPermission
-            === "function"
-        ) {
-            const permission =
-                await DeviceOrientationEvent.requestPermission();
+    function drawChineseText(text) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '30px "Microsoft YaHei", "Noto Sans CJK SC", "PingFang SC", sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
 
-            if (permission !== "granted") {
-                alert("没有获得传感器权限，请重新授权");
+        const paragraphs = text.split('\n');
+        let y = 30;
+        const lineHeight = 48;
+        const maxWidth = 950;
+
+        paragraphs.forEach(paragraph => {
+            if (paragraph === '') {
+                y += 25;
                 return;
             }
-        }
-
-        alert("传感器授权成功，请转动手机体验！");
-        
-    } catch (error) {
-        alert("传感器启动失败：" + error);
+            let line = '';
+            for (const char of paragraph) {
+                const testLine = line + char;
+                if (ctx.measureText(testLine).width > maxWidth) {
+                    ctx.fillText(line, 30, y);
+                    line = char;
+                    y += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            if (line) {
+                ctx.fillText(line, 30, y);
+                y += lineHeight;
+            }
+        });
     }
 
+    const exhibitInfo = {
+        energyCube: {
+            title: '01 能量立方',
+            content: '能量立方\n\n蓝色能量立方体代表未来科技中的能量存储与传输技术。\n\n展品通过持续旋转的动画，展示科技能量的动态变化。'
+        },
+        energySphere: {
+            title: '02 能量核心',
+            content: '能量核心\n\n紫色能量核心象征未来能源系统的核心动力。\n\n球体持续上下悬浮，外围蓝色能量环同步旋转，营造出充满科技感的视觉效果。'
+        },
+        energyTower: {
+            title: '03 能量之塔',
+            content: '能量之塔\n\n紫色能量柱代表未来能源传输与能量控制装置。\n\n通过反复缩放动画，模拟能量不断聚集与释放的过程。'
+        }
+    };
+
+    function refreshTexture() {
+        const mesh = contentPlane.getObject3D('mesh');
+        if (mesh && mesh.material && mesh.material.map) {
+            mesh.material.map.needsUpdate = true;
+        }
+        contentPlane.setAttribute('material', 'src', '#infoCanvas');
+        const mesh2 = contentPlane.getObject3D('mesh');
+        if (mesh2 && mesh2.material && mesh2.material.map) {
+            mesh2.material.map.needsUpdate = true;
+        }
+    }
+
+    function showInfo(exhibitId) {
+        const info = exhibitInfo[exhibitId];
+        if (!info) return;
+
+        titleEl.setAttribute('value', info.title);
+        drawChineseText(info.content);
+        refreshTexture();
+        panel.setAttribute('visible', true);
+    }
+
+    Object.keys(exhibitInfo).forEach(function (id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('click', function (evt) {
+                evt.stopPropagation();
+                showInfo(id);
+            });
+        }
+    });
+
+    document.querySelector('#closePanel').addEventListener('click', function (evt) {
+        evt.stopPropagation();
+        panel.setAttribute('visible', false);
+    });
+
+    drawChineseText(' ');
+    refreshTexture();
 });
 </script>
-
 
 </body>
 </html>
